@@ -66,6 +66,7 @@ public class Groupe {
 		this.nom = nom;
 		this.contacts = contacts;
 	}
+
 	
 	
 	

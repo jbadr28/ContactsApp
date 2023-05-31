@@ -40,7 +40,7 @@ public class ContactService {
 		return contactRepo.findAll(sortByName);
 	}
 	
-	public Contact addAddressToStudent(Contact contact, Groupe group) {
+	public Contact addContactToGroup(Contact contact, Groupe group) {
         //Contact contact = contactRepo.findById(contactId).orElseThrow(() -> new RuntimeException("contact not found"));
         System.out.println("contact"+contact.toString());
         //Groupe group = groupRepo.findById(groupId).orElseThrow(() -> new RuntimeException("group not found"));
@@ -76,5 +76,9 @@ public class ContactService {
 	public Optional<Contact> findById(Long id) {
 		// TODO Auto-generated method stub
 		return contactRepo.findById(id);
+	}
+	
+	public void update(Contact contact) {
+		contactRepo.save(contact);
 	}
 }

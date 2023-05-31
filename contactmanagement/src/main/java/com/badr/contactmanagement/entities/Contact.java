@@ -1,7 +1,9 @@
 package com.badr.contactmanagement.entities;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -13,6 +15,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.Transient;
+
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -34,8 +38,9 @@ public class Contact {
 	
 	private String adress;
 	
-	private String emailpresonel;
+	private String emailpresonal;
 	
+
 	private String emailprofessional;
 	@Enumerated(EnumType.STRING)
 	private Gender gender ;
@@ -46,12 +51,14 @@ public class Contact {
 	@JsonManagedReference
 	
 	//@JsonBackReference
-	private List<Groupe> groups = new ArrayList<Groupe>();
+	private Set<Groupe> groups = new HashSet<Groupe>();
 	public Contact() {
 		
 	}
 
-	
+
+
+
 
 	public Long getId() {
 		return id;
@@ -94,11 +101,11 @@ public class Contact {
 	}
 
 	public String getEmailpresonel() {
-		return emailpresonel;
+		return emailpresonal;
 	}
 
-	public void setEmailpresonel(String emailpresonel) {
-		this.emailpresonel = emailpresonel;
+	public void setEmailpresonel(String emailpresonal) {
+		this.emailpresonal = emailpresonal;
 	}
 
 	public String getEmailprofessional() {
@@ -117,11 +124,11 @@ public class Contact {
 		this.gender = gender;
 	}
 
-	public List<Groupe> getGroups() {
+	public Set<Groupe> getGroups() {
 		return groups;
 	}
 
-	public void setGroups(List<Groupe> groups) {
+	public void setGroups(Set<Groupe> groups) {
 		this.groups = groups;
 	}
 
@@ -132,15 +139,15 @@ public class Contact {
 	public void setNom(String nom) {
 		this.nom = nom;
 	}
-	public Contact(Long id, String nom,String prenom, String telephone1, String telephone2, String adress, String emailpresonel,
-			String emailprofessional, Gender gender, List<Groupe> groups) {
+	public Contact(Long id, String nom,String prenom, String telephone1, String telephone2, String adress, String emailpresonal,
+			String emailprofessional, Gender gender, Set<Groupe> groups) {
 		this.id = id;
 		this.nom = nom;
 		this.prenom = prenom;
 		this.telephone1 = telephone1;
 		this.telephone2 = telephone2;
 		this.adress = adress;
-		this.emailpresonel = emailpresonel;
+		this.emailpresonal = emailpresonal;
 		this.emailprofessional = emailprofessional;
 		this.gender = gender;
 		this.groups = groups;
@@ -148,10 +155,11 @@ public class Contact {
 
 
 
+
 	@Override
 	public String toString() {
 		return "Contact [id=" + id + ", nom=" + nom + ", prenom=" + prenom + ", telephone1=" + telephone1
-				+ ", telephone2=" + telephone2 + ", adress=" + adress + ", emailpresonel=" + emailpresonel
+				+ ", telephone2=" + telephone2 + ", adress=" + adress + ", emailpresonel=" + emailpresonal
 				+ ", emailprofessional=" + emailprofessional + ", gender=" + gender + ", groups=" + groups + "]";
 	}
 	
