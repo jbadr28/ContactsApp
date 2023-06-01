@@ -78,6 +78,7 @@ public class ContactRestController {
 		return contactService.getContactByPhoneNumber(phone);
 	}
 	
+
 	@PostMapping("/addgroup")
 	public ResponseEntity<String> addgrouptoContact(@RequestParam("contactId") String contactId, @RequestParam("groupId") String groupId){
 		System.out.println("contactID : "+contactId+" groupId : "+groupId);

@@ -42,11 +42,17 @@ public class ContactController {
 		List<Contact> contacts = contactService.getAllContacts();
 		List<Groupe> groups = groupeService.getAllGroupes();
 		model.addAttribute("contacts", contacts);
+		model.addAttribute("groups",groups);
 		model.addAttribute("contact_number", contacts.size());
 		model.addAttribute("group_number",groups.size());
 		return "index";
 	}
 
+	@PostMapping("/deleteGroup")
+	public String deleteGroup(@RequestParam("id") Long id) {
+		groupeService.deleteGroupe(id);
+		return "redirect:/";
+	}
 	@PostMapping("/delete")
 	public String deleteContact(@RequestParam("id") Long id) {
 		System.out.println("delete called");
@@ -54,8 +60,25 @@ public class ContactController {
 		return "redirect:/";
 	}
 
+	@PostMapping("/modifygroup")
+	public String groupDetails(@RequestParam("id") Long id, Model model) {
+		Groupe group = groupeService.findById(id);
+		model.addAttribute("group_modified", group);
+		List<Contact> allContacts = contactService.getAllContacts();
+		Set<Contact> contactIn = group.getContacts();
+		Set<Contact> contactOut = new HashSet<Contact>();
+		for(Contact con:allContacts) {
+			if(!contactIn.contains(con)) {
+				contactOut.add(con);
+			}
+		}
+		model.addAttribute("contactsIn",contactIn);
+		model.addAttribute("Noncontact",contactOut);
+		model.addAttribute("contacts",allContacts);
+		return "/modifygroup";
+	}
 	@PostMapping("/home")
-	public String ContactDetails(@RequestParam("id") Long id, Model model) throws Exception {
+	public String contactDetails(@RequestParam("id") Long id, Model model) throws Exception {
 		System.out.println("redirectiojn");
 		System.out.println(id);
 		Contact c = contactService.findById(id).orElseThrow(() -> {
@@ -78,39 +101,17 @@ public class ContactController {
 		return "/modifycontact";
 	}
 
-	@GetMapping("/edit/{id}")
-	public String showEditForm(@PathVariable("id") Long id, Model model) throws Exception {
-		System.out.println("redirectiojn");
-		System.out.println(id);
-		Contact c = contactService.findById(id).orElseThrow(() -> {
-			return new Exception("Contact not Found");
-		});
-		model.addAttribute("contact_modified", c);
-		List<Groupe> gr = groupeService.getAllGroupes();
-		Set<Groupe> groupeIn = c.getGroups();
-		// System.out.println("before modifectatino"+c);
-		System.out.println("before modifectatino" + groupeIn);
-//		List<Groupe> groupeOut = new ArrayList<Groupe>();
-//		for (Groupe g : gr) {
-//			if (!groupeIn.contains(g)) {
-//				groupeOut.add(g);
-//			}
-//		}
-//		model.addAttribute("NonGroupe", groupeOut);
-		model.addAttribute("groupes", gr);
-		model.addAttribute("groupsIn",groupeIn);
-		model.addAttribute("user", "Badr Eddine Jalili");
-		Contact existingContact = contactService.findById(id).orElseThrow(() -> {
-			return new Exception("Contact not Found");
-		});
-
-		model.addAttribute("contact", existingContact);
-		return "modifycontact";
+	@PostMapping("/editgroup/{id}")
+	public String updateGroup(@PathVariable("id") Long id, Model model,
+			@ModelAttribute("updated_group")Groupe updatedgroup) {
+		Groupe modified = groupeService.findById(id);
+		modified.setNom(updatedgroup.getNom());
+		groupeService.saveGroupe(updatedgroup);
+		return "redirect:/";
 	}
-
 	@PostMapping("/edit/{id}")
 	public String updateContact(@PathVariable("id") Long id, Model model,
-			@ModelAttribute("updated_contact") Contact updatedContact,@ModelAttribute("selectedGroups") Object groupNames) throws Exception {
+			@ModelAttribute("updated_contact") Contact updatedContact) throws Exception {
 		System.out.println("contact to be updated" + updatedContact);
 		Contact modified = contactService.findById(updatedContact.getId()).orElseThrow(() -> {
 			return new Exception("contact not found");
@@ -123,25 +124,23 @@ public class ContactController {
 		modified.setTelephone2(updatedContact.getTelephone2());
 		modified.setEmailpresonel(updatedContact.getEmailpresonel());
 		modified.setEmailprofessional(updatedContact.getEmailprofessional());
-		System.out.println("ModelAttribute groupsIN" + groupNames);
-//		for(String g : groupNames) {
-//			System.out.println(g);
-//		}
-		  System.out.println(updatedContact.getGroups()); 
-//		  List<String> gruop =updatedContact.getGroupNames(); 
-//		  for(String f:gruop) {
-//			  System.out.println(f);
-//		  }
-		  System.out.println("group in"+model.getAttribute("GroupsIn"));
-		  System.out.println("Nongroup"+model.getAttribute("NonGroupe"));
-		System.out.println(model.getAttribute("selectedGroups"));
 		contactService.update(modified);
 
 		return "redirect:/";
 	}
 	
+	@GetMapping("/createGroup")
+	public String redirectToCreateGroupForm(Model model) {
+		model.addAttribute("newGroup",new Groupe());
+		return "/createGroup";
+	}
+	@PostMapping("/createGroup")
+	public String createGroup(@ModelAttribute("newGroup")Groupe group) {
+		groupeService.saveGroupe(group);
+		return "redirect:/";
+	}
 	@GetMapping("/createContact")
-	public String redirectToCreatContactForm(Model model) {
+	public String redirectToCreateContactForm(Model model) {
 		model.addAttribute("newContact",new Contact());
 		return "/createContact";
 	}

@@ -44,7 +44,6 @@
             <a class="navbar-brand ps-3" th:href="@{/}">developped by JBE</a>
             <!-- Sidebar Toggle-->
             <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!"><i class="fas fa-bars"></i></button>
-            <!-- Navbar Search-->
             <!-- Navbar-->
             <ul class="navbar-nav ms-auto ms-md-0 me-3 me-lg-4">
                 <li class="nav-item dropdown">
@@ -164,44 +163,12 @@
                        				<h1>Create a new Contact</h1>
 									<div class="container">
         							<h2>Contact Form</h2>
-        							<form th:action="@{/createContact}" th:object="${newContact}" method="post" >
+        							<form th:action="@{/createGroup}" th:object="${newGroup}" method="post" >
             							<div id="contactId" hidden="true" th:value="*{id}"></div>
             							<div class="form-group">
-                							<label for="firstName">First Name:</label>
-                							<input type="text" class="form-control" id="firstName" th:field="*{nom}">
+                							<label for="firstName">Group Name:</label>
+                							<input type="text" class="form-control" id="Name" th:field="*{nom}">
             							</div>
-            							<div class="form-group">
-                							<label for="lastName">Last Name:</label>
-                							<input type="text" class="form-control" id="lastName" th:field="*{prenom}">
-            							</div>
-            							<div class="form-group">
-                							<label for="firstName">Adress :</label>
-                							<input type="text" class="form-control" id="firstName" th:field="*{adress}">
-            							</div>
-            							<div class="form-group">
-                							<label for="email">Personal Email:</label>
-                							<input type="email" class="form-control" id="email" th:field="*{emailpresonel}">
-            							</div>
-            							<div class="form-group">
-                							<label for="firstName">Professional Email:</label>
-                							<input type="text" class="form-control" id="firstName" th:field="*{emailprofessional}">
-            							</div>
-            							<div class="form-group">
-                							<label for="firstName">Phone Number 1:</label>
-                							<input type="text" class="form-control" id="firstName" th:field="*{telephone1}">
-            							</div>
-            							<div class="form-group">
-                							<label for="firstName">Phone Number 2:</label>
-                							<input type="text" class="form-control" id="firstName" th:field="*{telephone2}">
-            							</div>
-            							<div class="form-group">
-                							<label for="gender">Gender:</label>
-                							<select class="form-control" id="gender" th:field="*{gender}">
-                    							<option value="Male">Male</option>
-                    							<option value="Female">Female</option>
-                							</select>
-            							</div>
-            							
             						<button type="submit"  class="btn btn-primary">Save</button>
         						</form>
     						</div>

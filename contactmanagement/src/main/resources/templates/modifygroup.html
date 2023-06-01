@@ -82,7 +82,7 @@
             <div id="layoutSidenav_content">
                 <main>
                     <div class="container-fluid px-4">
-                        <h1 class="mt-4">Contact Modification</h1>
+                        <h1 class="mt-4">Group Modification</h1>
                         <ol class="breadcrumb mb-4">
                             
                         </ol>
@@ -91,60 +91,29 @@
                         <div class="card mb-4"  style="border:3px solid black;background-color: #0011">
                             <div class="card-header" style="color:white;background-color: #009879">
                             	<i class="fa-solid fa-user-pen"></i>
-                                Contact Update
+                                Group Update
                             </div>
                             <div class="card-body">
-                       				<h1>modify <span th:text="${contact_modified.nom}"></span></h1>
+                       				<h1>modify <span th:text="${group_modified.nom}"></span></h1>
 									<div class="container">
         							<h2>Contact Form</h2>
-        							<form th:action="@{/edit/{id}(id=${contact_modified.id})}" th:object="${contact_modified}" method="post" enctype="application/x-www-form-urlencoded">
-            							<div id="contactId" hidden="true" th:value="*{id}"></div>
+        							<form th:action="@{/editgroup/{id}(id=${group_modified.id})}" th:object="${group_modified}" method="post" enctype="application/x-www-form-urlencoded">
+            							<div id="groupId" hidden="true" th:value="*{id}"></div>
             							<div class="form-group">
-                							<label for="firstName">First Name:</label>
+                							<label for="firstName">Group Name:</label>
                 							<input type="text" class="form-control" id="firstName" th:field="*{nom}">
             							</div>
-            							<div class="form-group">
-                							<label for="lastName">Last Name:</label>
-                							<input type="text" class="form-control" id="lastName" th:field="*{prenom}">
-            							</div>
-            							<div class="form-group">
-                							<label for="firstName">Adress :</label>
-                							<input type="text" class="form-control" id="firstName" th:field="*{adress}">
-            							</div>
-            							<div class="form-group">
-                							<label for="email">Personal Email:</label>
-                							<input type="email" class="form-control" id="email" th:field="*{emailpresonel}">
-            							</div>
-            							<div class="form-group">
-                							<label for="firstName">Professional Email:</label>
-                							<input type="text" class="form-control" id="firstName" th:field="*{emailprofessional}">
-            							</div>
-            							<div class="form-group">
-                							<label for="firstName">Phone Number 1:</label>
-                							<input type="text" class="form-control" id="firstName" th:field="*{telephone1}">
-            							</div>
-            							<div class="form-group">
-                							<label for="firstName">Phone Number 2:</label>
-                							<input type="text" class="form-control" id="firstName" th:field="*{telephone2}">
-            							</div>
-            							<div class="form-group">
-                							<label for="gender">Gender:</label>
-                							<select class="form-control" id="gender" th:field="*{gender}">
-                    							<option value="Male">Male</option>
-                    							<option value="Female">Female</option>
-                							</select>
-            							</div>
-            							<label>Groups:</label>
+            							<label>Contacts:</label>
             							<div class="flex-container" style="display: flex;">
             							
   											<div class="flex-child magenta" style="flex: 1;  border: 2px solid green;margin-right: 20px;">
     											<div class="form-group container">
-    												<label for="groups">Groups that contains the contact:</label>
+    												<label for="contacts">Contacts that are members of the Group:</label>
     												<div class="groups-container containter">
-      													<ul id="selectedGroups" class="group-list connectedSortable ">
-        													<li th:each="group : ${groupsIn}"  class="draggable" draggable="true">
-        														<input type="checkbox" id="selectedGroups" th:value="${group.id}"  th:checked="true" style="display: none;">
-            													<label th:text="${group.nom}" for="selectedGroups"></label>
+      													<ul id="selectedContacts" class="group-list connectedSortable ">
+        													<li th:each="contact : ${contactsIn}"  class="draggable" draggable="true">
+        														<input type="checkbox" id="selectedContacts" th:value="${contact.id}"  th:checked="true" style="display: none;">
+            													<label th:text="${contact.nom+' '+contact.prenom}" for="selectedContacts"></label>
           													</li>
       													</ul>
       												</div>
@@ -153,12 +122,12 @@
   												
   											<div class="flex-child green" style="flex: 1;  border: 2px solid red;margin-right: 20px;">
     											<div class="form-group container">
-    												<label for="groups">Groups that does not contain the contact</label>
+    												<label for="groups">Contacts that aren't members of the group</label>
     												<div class="groups-container container">
-      													<ul   id="availableGroups" class="group-list connectedSortable" >
-      														<li  th:each="group: ${NonGroupe}"  class="draggable" draggable="true">
-      														 <input  id="availableGroups" type="checkbox"  th:value="${group.id}" style="display: none;">
-            												<label  th:text="${group.nom}" for="availableGroups"></label>
+      													<ul   id="availableContacts" class="group-list connectedSortable" >
+      														<li  th:each="contact: ${Noncontact}"  class="draggable" draggable="true">
+      														 <input  id="availableContacts" type="checkbox"  th:value="${contact.id}" style="display: none;">
+            												<label  th:text="${contact.nom+' '+contact.prenom}" for="availableContacts"></label>
             												</li>
       													</ul>
       												</div>
@@ -191,7 +160,7 @@
         </div>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
         <script src="js/scripts.js"></script>
-        <script src="js/group.js"></script>
+        <script src="js/contacts.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
         <script src="assets/demo/chart-area-demo.js"></script>
         <script src="assets/demo/chart-bar-demo.js"></script>

@@ -10,18 +10,112 @@
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
         <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
         <link href="css/styles.css" rel="stylesheet" />
+        <script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js"></script>
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.2.0/css/bootstrap.min.css" rel="stylesheet" />
+        <link href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css" rel="stylesheet" />
         <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+        <script src="https://code.jquery.com/jquery-3.5.1.js" ></script>
+        <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js" ></script>
+        <script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js" ></script>
+        <script>
+        const labels = document.querySelectorAll('.mylabel');
+
+        labels.forEach(label => {
+            label.addEventListener('click', scrollToTarget);
+        });
+
+        function scrollToTarget(event) {
+            event.preventDefault();
+
+            const targetId = this.getAttribute('href').substring(1);
+            const targetElement = document.getElementById(targetId);
+
+            if (targetElement) {
+                const offsetTop = targetElement.offsetTop;
+
+                window.scrollTo({
+                    top: offsetTop,
+                    behavior: 'smooth'
+                });
+            }
+        }
+        $(document).ready(function () {
+        	const options = {
+        		    searchable: true
+        		  };
+        	const table1 = new simpleDatatables.DataTable('#contactTable',options);
+        	const table2 = new simpleDatatables.DataTable('#groupTable',options);
+            
+        });
+    	</script>
+        <style>
+        /* CSS styles for the labels */
+        .mylabel {
+            display: block;
+            margin-bottom: 10px;
+            cursor: pointer;
+        }
+
+        /* CSS styles for the target elements */
+        .mytarget {
+            margin-top: 500px;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+     		.styled-table {
+    border-collapse: collapse;
+    margin: 25px 0;
+    font-size: 0.9em;
+    font-family: sans-serif;
+    min-width: 400px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+}
+.styled-table thead tr {
+    background-color: #009879;
+    color: #ffffff;
+    text-align: left;
+}
+.styled-table th,
+.styled-table td {
+    padding: 12px 15px;
+}
+.styled-table tbody tr {
+    border-bottom: 1px solid #dddddd;
+}
+
+.styled-table tbody tr:nth-of-type(even) {
+    background-color: #f3f3f3;
+}
+
+.styled-table tbody tr:last-of-type {
+    border-bottom: 2px solid #009879;
+}
+.styled-table tbody tr.active-row {
+    font-weight: bold;
+    color: #009879;
+}
+        </style>
     </head>
-    <body class="sb-nav-fixed">
-        <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
+    <body class="sb-nav-fixed" >
+     <script>
+    function scrollToElement(elementId) {
+      const element = document.getElementById(elementId);
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+  </script>
+    <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
             <!-- Navbar Brand-->
-            <a class="navbar-brand ps-3" href="index.html">developped by JBE</a>
+            <a class="navbar-brand ps-3" th:href="@{/}">developped by JBE</a>
+            <a class="navbar-brand ps-3 mylabel" href="#contactTable">Contacts List</a>
+            <a class="navbar-brand ps-3 mylabel" href="#groupTable">Groups List</a>
             <!-- Sidebar Toggle-->
-            <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!"><i class="fas fa-bars"></i></button>
+            <!-- <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!"><i class="fas fa-bars"></i></button> -->
             <!-- Navbar Search-->
             <form class="d-none d-md-inline-block form-inline ms-auto me-0 me-md-3 my-2 my-md-0">
                 <div class="input-group">
-                    <input class="form-control" type="text" placeholder="Search for..." aria-label="Search for..." aria-describedby="btnNavbarSearch" />
+                    <input class="form-control" type="text" placeholder="Search for..." aria-label="Search for..." aria-describedby="btnNavbarSearch" style="width: 25em;"/>
                     <button class="btn btn-primary" id="btnNavbarSearch" type="button"><i class="fas fa-search"></i></button>
                 </div>
             </form>
@@ -38,79 +132,10 @@
                 </li>
             </ul>
         </nav>
-        <div id="layoutSidenav">
-            <div id="layoutSidenav_nav">
-                <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
-                    <div class="sb-sidenav-menu">
-                        <div class="nav">
-                            <div class="sb-sidenav-menu-heading">Core</div>
-                            <a class="nav-link" href="index.html">
-                                <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
-                                Dashboard
-                            </a>
-                            <div class="sb-sidenav-menu-heading">Interface</div>
-                            <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
-                                <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
-                                Layouts
-                                <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-                            </a>
-                            <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
-                                <nav class="sb-sidenav-menu-nested nav">
-                                    <a class="nav-link" href="layout-static.html">Static Navigation</a>
-                                    <a class="nav-link" href="layout-sidenav-light.html">Light Sidenav</a>
-                                </nav>
-                            </div>
-                            <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapsePages" aria-expanded="false" aria-controls="collapsePages">
-                                <div class="sb-nav-link-icon"><i class="fas fa-book-open"></i></div>
-                                Pages
-                                <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-                            </a>
-                            <div class="collapse" id="collapsePages" aria-labelledby="headingTwo" data-bs-parent="#sidenavAccordion">
-                                <nav class="sb-sidenav-menu-nested nav accordion" id="sidenavAccordionPages">
-                                    <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#pagesCollapseAuth" aria-expanded="false" aria-controls="pagesCollapseAuth">
-                                        Authentication
-                                        <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-                                    </a>
-                                    <div class="collapse" id="pagesCollapseAuth" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordionPages">
-                                        <nav class="sb-sidenav-menu-nested nav">
-                                            <a class="nav-link" href="login.html">Login</a>
-                                            <a class="nav-link" href="register.html">Register</a>
-                                            <a class="nav-link" href="password.html">Forgot Password</a>
-                                        </nav>
-                                    </div>
-                                    <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#pagesCollapseError" aria-expanded="false" aria-controls="pagesCollapseError">
-                                        Error
-                                        <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-                                    </a>
-                                    <div class="collapse" id="pagesCollapseError" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordionPages">
-                                        <nav class="sb-sidenav-menu-nested nav">
-                                            <a class="nav-link" href="401.html">401 Page</a>
-                                            <a class="nav-link" href="404.html">404 Page</a>
-                                            <a class="nav-link" href="500.html">500 Page</a>
-                                        </nav>
-                                    </div>
-                                </nav>
-                            </div>
-                            <div class="sb-sidenav-menu-heading">Addons</div>
-                            <a class="nav-link" href="charts.html">
-                                <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
-                                Charts
-                            </a>
-                            <a class="nav-link" href="tables.html">
-                                <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
-                                Tables
-                            </a>
-                        </div>
-                    </div>
-                    <div class="sb-sidenav-footer">
-                        <div class="small">Logged in as:</div>
-                        <span th:text="${user}"></span>
-                    </div>
-                </nav>
-            </div>
-            <div id="layoutSidenav_content">
+        <div id="layoutSidenav" >
+            <div id="layoutSidenav_content" >
                 <main>
-                    <div class="container-fluid px-4">
+                    <div class="container-fluid px-4" >
                         <h1 class="mt-4">Dashboard</h1>
                         <ol class="breadcrumb mb-4">
                             <li class="breadcrumb-item active">Dashboard</li>
@@ -129,60 +154,21 @@
                                 <div class="card bg-warning text-white mb-4">
                                     <div class="card-body">You have <strong><span th:text="${group_number}"></span></strong> Groups</div>
                                     <div class="card-footer d-flex align-items-center justify-content-between">
-                                        <a class="small text-white stretched-link" href="#">Create a new Group</a>
+                                        <a class="small text-white stretched-link" th:href="@{/createGroup}">Create a new Group</a>
                                         <div class="small text-white"><i class="fas fa-angle-right"></i></div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-xl-3 col-md-6">
-                                <div class="card bg-success text-white mb-4">
-                                    <div class="card-body">Success Card</div>
-                                    <div class="card-footer d-flex align-items-center justify-content-between">
-                                        <a class="small text-white stretched-link" href="#">View Details</a>
-                                        <div class="small text-white"><i class="fas fa-angle-right"></i></div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-xl-3 col-md-6">
-                                <div class="card bg-danger text-white mb-4">
-                                    <div class="card-body">Danger Card</div>
-                                    <div class="card-footer d-flex align-items-center justify-content-between">
-                                        <a class="small text-white stretched-link" href="#">View Details</a>
-                                        <div class="small text-white"><i class="fas fa-angle-right"></i></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-xl-6">
-                                <div class="card mb-4">
-                                    <div class="card-header">
-                                        <i class="fas fa-chart-area me-1"></i>
-                                        Area Chart Example
-                                    </div>
-                                    <div class="card-body"><canvas id="myAreaChart" width="100%" height="40"></canvas></div>
-                                </div>
-                            </div>
-                            <div class="col-xl-6">
-                                <div class="card mb-4">
-                                    <div class="card-header">
-                                        <i class="fas fa-chart-bar me-1"></i>
-                                        Bar Chart Example
-                                    </div>
-                                    <div class="card-body"><canvas id="myBarChart" width="100%" height="40"></canvas></div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card mb-4">
-                            <div class="card-header">
+                        <div class="card mb-4" style="border:3px solid black;background-color: #0011">
+                            <div class="card-header" style="color:white;background-color: #009879">
                                 <i class="fas fa-table me-1"></i>
                                 List Of All Contacts
                             </div>
                             <div class="card-body">
-                                <table id="datatablesSimple">
+                                <table id="contactTable" class="styled-table mytarget">
                                     <thead>
                                         <tr>
-                                            <th>First Name</th>
+                                            <th>Contact Name</th>
                                             <th>Second Name</th>
                                             <th>Phone Number 1</th>
                                             <th>Phone Numbre 2</th>
@@ -228,7 +214,6 @@
         										<td>
 													<form th:action="@{/home}" method="POST">
         												<input type="hidden" name="id" th:value="${contact.id}" />
-        												
         												<button type="submit" style="color:white;border:thin white;"><i class="fa-solid fa-wrench fa-lg" style="color: #000000;"></i></button>
     												</form>
         										</td>
@@ -236,6 +221,58 @@
                                     </tbody>
                                 </table>
                             </div>
+                        </div>
+                        </div>
+                    </div>
+                </main>
+                <main>
+                    <div class="container-fluid px-4" >
+                        <div class="row" >
+                        <div class="card mb-4" style="border:3px solid black;background-color: #0011">
+                            <div class="card-header" style="color:white;background-color: #009879; ">
+                                <i class="fas fa-table me-1"></i>
+                                List Of All Groups
+                            </div>
+                            <div class="card-body" >
+                                <table id="groupTable" class="styled-table mytarget" >
+                                    <thead>
+                                        <tr>
+                                            <th>Group Name</th>
+                                            <th>Number of Contacts</th>
+                                            <th>remove</th>
+                                            <th>modify</th>
+                                        </tr>
+                                    </thead>
+                                    <tfoot>
+                                        <tr>
+                                            <th>Group Name</th>
+                                            <th>Number of Contacts</th>
+                                            <th>remove</th>
+                                            <th>modify</th>
+                                        </tr>
+                                    </tfoot>
+                                    <tbody>
+                                    		<tr th:each="group : ${groups}">
+                                    			<td th:text="${group.nom}"></td>
+                                            	<td th:text="${group.getContacts().size()}">
+            									<td>
+													<form th:action="@{/deleteGroup}" method="POST">
+        												<input type="hidden" name="id" th:value="${group.id}" />
+        												
+        												<button type="submit" style="color:white;border:thin white;"><i class="fa-solid fa-user-xmark fa-beat fa-lg" style="color: red;"></i></button>
+    												</form>
+        										</td>
+        										<td>
+													<form th:action="@{/modifygroup}" method="POST">
+        												<input type="hidden" name="id" th:value="${group.id}" />
+        												<button type="submit" style="color:white;border:thin white;"><i class="fa-solid fa-wrench fa-lg" style="color: #000000;"></i></button>
+    												</form>
+        										</td>
+        									</tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
                         </div>
                     </div>
                 </main>
