@@ -9,12 +9,14 @@ import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.Transient;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
@@ -39,7 +41,6 @@ public class Contact {
 	private String adress;
 	
 	private String emailpresonal;
-	
 
 	private String emailprofessional;
 	@Enumerated(EnumType.STRING)
@@ -57,6 +58,20 @@ public class Contact {
 	}
 
 
+
+
+
+	public String getEmailpresonal() {
+		return emailpresonal;
+	}
+
+
+
+
+
+	public void setEmailpresonal(String emailpresonal) {
+		this.emailpresonal = emailpresonal;
+	}
 
 
 

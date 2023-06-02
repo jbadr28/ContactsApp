@@ -1,6 +1,8 @@
 package com.badr.contactmanagement.controllers;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -24,6 +26,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.badr.contactmanagement.entities.Contact;
 import com.badr.contactmanagement.entities.Gender;
 import com.badr.contactmanagement.entities.Groupe;
+import com.badr.contactmanagement.nlp.NlpClass;
 import com.badr.contactmanagement.services.ContactService;
 import com.badr.contactmanagement.services.GroupeService;
 
@@ -52,6 +55,61 @@ public class ContactController {
 	public String deleteGroup(@RequestParam("id") Long id) {
 		groupeService.deleteGroupe(id);
 		return "redirect:/";
+	}
+	@PostMapping("/search")
+	public String search(@RequestParam("searchInput") String searchInput,Model model) {
+		Set<Contact> contacts =new HashSet<Contact>();
+		if(NlpClass.isNumeric(searchInput)) {
+			List<Contact> contactsNumber = contactService.searchByPhoneNumCont(searchInput);
+			for(Contact c: contactsNumber) {
+				System.out.println("contact by phone "+c);
+				contacts.add(c);
+			}
+			model.addAttribute("contacts", contacts);
+			model.addAttribute("contact_number", contacts.size());
+		}else {
+			
+			List<Contact> allContacts = contactService.getAllContacts();
+			System.out.println("searchinput "+searchInput);
+			List<Contact> contactbyregex = contactService.search(searchInput);
+			for(Contact c: contactbyregex) {
+				System.out.println(c);
+				contacts.add(c);
+			}
+			List<Contact> conSoundex = contactService.searchSoundex(searchInput);
+			for(Contact c : conSoundex) {
+				System.out.println("found by soundex "+c);
+				contacts.add(c);
+			}
+			
+			for(Contact c : allContacts) {
+				if(Math.min(
+					NlpClass.minEditDistance(c.getNom(), searchInput), 
+					NlpClass.minEditDistance(c.getPrenom(), searchInput)
+					)<=3){
+					System.out.println("min edit distance is "+Math.min(
+					NlpClass.minEditDistance(c.getNom(), searchInput), 
+					NlpClass.minEditDistance(c.getPrenom(), searchInput)
+					));
+					contacts.add(c);
+					}
+			}
+			List<Contact> sortedConatcts = new ArrayList<>(contacts);
+			Collections.sort(sortedConatcts, Comparator.comparingInt(c -> 
+			Math.min(
+					NlpClass.minEditDistance(c.getNom(), searchInput), 
+					NlpClass.minEditDistance(c.getPrenom(), searchInput)
+					)));
+			model.addAttribute("contacts", sortedConatcts);
+			model.addAttribute("contact_number", sortedConatcts.size());
+			
+		}
+		
+		model.addAttribute("user", "Badr Eddine Jalili");
+		List<Groupe> groups = groupeService.getAllGroupes();
+		model.addAttribute("group_number",groups.size());
+		model.addAttribute("groups",groups);
+		return "index";
 	}
 	@PostMapping("/delete")
 	public String deleteContact(@RequestParam("id") Long id) {
@@ -150,12 +208,22 @@ public class ContactController {
 		contact.setId(null);
 		Contact registeredContact = contactService.saveContact(contact);
 		if( registeredContact.getGender().equals(Gender.Male)) {
-			System.out.println("ffff");
+			System.out.println("m");
 			Groupe sexGroupe = groupeService.findGroupeByNom("male");
+			if(sexGroupe==null) {
+				sexGroupe=new Groupe();
+				sexGroupe.setNom("male");
+				groupeService.saveGroupe(sexGroupe);
+			}
 			contactService.addContactToGroup(contact, sexGroupe);
 		}else if(registeredContact.getGender().equals(Gender.Female)) {
-			System.out.println("mmmm");
+			System.out.println("f");
 			Groupe sexGroupe = groupeService.findGroupeByNom("female");
+			if(sexGroupe==null) {
+				sexGroupe=new Groupe();
+				sexGroupe.setNom("female");
+				groupeService.saveGroupe(sexGroupe);
+			}
 			contactService.addContactToGroup(contact, sexGroupe);
 		}if(registeredContact.getNom()!=null) {
 			if(groupeService.findGroupeByNom(registeredContact.getNom())==null) {

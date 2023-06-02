@@ -53,7 +53,15 @@ public class ContactService {
         return contact;
     }
 	
-	
+	public List<Contact> searchSoundex(String search){
+		return contactRepo.findBySoundexNomOrSoundexPrenom(search);
+	}
+	public List<Contact> search(String search){
+		return contactRepo.findByNomContainingIgnoreCaseOrPrenomContainingIgnoreCase(search,search);
+	}
+	public List<Contact> searchByPhoneNumCont(String search){
+		return contactRepo.findByTelephone1ContainingOrTelephone2Containing(search, search);
+	}
 	public void deleteContact(Long id) {
 		Contact contact = contactRepo.findById(id).orElseThrow(() -> new IllegalArgumentException("Contact not found"));
 		for (Groupe group : contact.getGroups()) {

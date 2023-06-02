@@ -18,4 +18,5 @@ public interface GroupRepository extends JpaRepository<Groupe, Long>{
 
 	public Groupe findByNom(String nom);
 	
+	
 }

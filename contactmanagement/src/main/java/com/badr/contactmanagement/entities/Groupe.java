@@ -24,6 +24,7 @@ public class Groupe {
 	private Set<Contact> contacts = new HashSet<Contact>();
 
 
+
 	public Groupe() {
 		
 	}
